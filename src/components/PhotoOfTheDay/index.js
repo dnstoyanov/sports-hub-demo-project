@@ -1,0 +1,1 @@
+export { PhotoOfTheDay } from './PhotoOfTheDay';

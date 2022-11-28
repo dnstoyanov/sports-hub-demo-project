@@ -1,0 +1,81 @@
+import React, { useState } from 'react';
+import { styled } from '@mui/material/styles';
+import { Box } from '@mui/system';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import MuiAccordion from '@mui/material/Accordion';
+import MuiAccordionSummary from '@mui/material/AccordionSummary';
+import MuiAccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import { passedSurveys } from './mockData';
+import { styles } from './styles';
+
+export const SurveyList = () => {
+  const Accordion = styled(props => (
+    <MuiAccordion disableGutters elevation={0} square {...props} />
+  ))(({ theme }) => ({
+    border: `1px solid ${theme.palette.divider}`,
+    '&:not(:last-child)': {
+      borderBottom: 0,
+    },
+    '&:before': {
+      display: 'none',
+    },
+  }));
+
+  const AccordionSummary = styled(props => (
+    <MuiAccordionSummary
+      expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+      {...props}
+    />
+  ))(({ theme }) => ({
+    backgroundColor:
+      theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, .05)' : 'rgba(0, 0, 0, .03)',
+    flexDirection: 'row-reverse',
+    '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+      transform: 'rotate(90deg)',
+    },
+    '& .MuiAccordionSummary-content': {
+      marginLeft: theme.spacing(2),
+    },
+  }));
+
+  const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+    padding: theme.spacing(2),
+    borderTop: '1px solid rgba(0, 0, 0, .125)',
+  }));
+
+  const [expanded, setExpanded] = useState();
+
+  const handleChange = panel => (event, newExpanded) => {
+    setExpanded(newExpanded ? panel : false);
+  };
+
+  return (
+    <Box sx={{ maxHeight: '550px', overflowY: 'auto', ...styles.scrollBar }}>
+      {passedSurveys.map(surveys => (
+        <Accordion
+          key={surveys.id}
+          expanded={expanded === surveys.id}
+          onChange={handleChange(surveys.id)}
+        >
+          <AccordionSummary
+            sx={{ display: 'flex', justifyContent: 'space-between', ...styles.mainArticleCard }}
+          >
+            <Box sx={{ width: '60%', marginRight: '10px' }}>
+              <Typography> {surveys.title} </Typography>
+            </Box>
+            <Box>
+              <Typography> {surveys.surveyDate} </Typography>
+            </Box>
+          </AccordionSummary>
+          <AccordionDetails sx={{ width: '100%' }}>
+            <Typography sx={{ paddingBottom: '10px', color: 'red' }}>
+              {surveys.surveyConclusion}
+            </Typography>
+            <Typography> {surveys.subTitle} </Typography>
+          </AccordionDetails>
+        </Accordion>
+      ))}
+    </Box>
+  );
+};

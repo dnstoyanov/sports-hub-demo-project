@@ -1,0 +1,1 @@
+export { MainArticles } from './MainArticles';
